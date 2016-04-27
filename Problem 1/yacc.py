@@ -8,6 +8,7 @@ DEBUG = True
 # Namespace & built-in functions
 
 name = {}
+val = {}
 
 def cons(l):
     return [l[0]] + l[1]
@@ -192,9 +193,15 @@ def p_atom_num(p):
     'atom : NUM'
     p[0] = p[1]
 
+# modified to accept let functions
 def p_atom_word(p):
     'atom : TEXT'
-    p[0] = p[1]
+
+    if p[1] in val:
+        p[0] = val[p[1]]
+
+    else:
+        p[0] = p[1]
 
 def p_atom_empty(p): 
     'atom :'
@@ -211,6 +218,32 @@ def p_false(p):
 def p_nil(p):
     'atom : NIL'
     p[0] = None
+
+# for assignment of let function
+def p_assign_let(p):
+    'assign : LET LPAREN TEXT NUM RPAREN'
+
+    val[p[4]] = p[5]
+
+# fr calling let
+def p_call_let(p):
+    'call : LPAREN assign call RPAREN'
+
+    p[0] = p[3]
+    val.clear()
+
+# for calling bool
+def p_call_bool(p):
+    'call : LPAREN TEXT bool atom atom RPAREN'
+
+    try:
+        if (p[2] == "if"):
+            if p[3]:
+                p[0] = p[4]
+            else:
+                p[0] = p[5]
+    except:
+        print("Something is wrong with your bool")
 
 # Error rule for syntax errors
 def p_error(p):
