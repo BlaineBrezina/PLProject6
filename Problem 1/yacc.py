@@ -221,7 +221,7 @@ def p_nil(p):
 
 # for assignment of let function
 def p_assign_let(p):
-    'assign : LET LPAREN TEXT NUM RPAREN'
+    'assign : LET LPAREN SIMB NUM RPAREN'
 
     val[p[4]] = p[5]
 
@@ -234,10 +234,10 @@ def p_call_let(p):
 
 # for calling bool
 def p_call_bool(p):
-    'call : LPAREN TEXT bool atom atom RPAREN'
+    'call : LPAREN SIMB bool atom atom RPAREN'
 
     try:
-        if (p[2] == "if"):
+        if p[2] == 'if':
             if p[3]:
                 p[0] = p[4]
             else:
