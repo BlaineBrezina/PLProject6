@@ -223,13 +223,14 @@ def p_nil(p):
 def p_assign_let(p):
     'assign : LET LPAREN SIMB NUM RPAREN'
 
-    val[p[4]] = p[5]
+    val[p[3]] = p[4]
+    p[0] = 0
 
-# fr calling let
+# for calling let
 def p_call_let(p):
     'call : LPAREN assign call RPAREN'
 
-    p[0] = p[3]
+    p[0] = p[2]
     val.clear()
 
 # for calling bool
