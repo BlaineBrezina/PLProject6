@@ -235,14 +235,13 @@ def p_call_let(p):
 
 # for calling bool
 def p_call_bool(p):
-    'call : LPAREN SIMB bool atom atom RPAREN'
+    'call : LPAREN IF bool atom atom RPAREN'
 
     try:
-        if p[2] == 'if':
-            if p[3]:
-                p[0] = p[4]
-            else:
-                p[0] = p[5]
+        if p[3]:
+            p[0] = p[4]
+        else:
+            p[0] = p[5]
     except:
         print("Something is wrong with your bool")
 
