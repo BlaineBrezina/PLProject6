@@ -57,7 +57,17 @@ def cond(l):
 
 name['cond'] = cond
 
+def let(l):
+   # val[l[0][0]] = l[0][1]
+    val[l[0]] = l[1]
+    print val
+    #return l[0][1]
+    return l[1]
+
+name['let'] = let
+
 def add(l):
+
     return sum(l)
 
 name['+'] = add
@@ -83,7 +93,9 @@ def lisp_eval(simb, items):
 
 def call(f, l):
     try:
-        return f(eval_lists(l))  
+
+        return f(eval_lists(l))
+
     except TypeError:
         return f
 
@@ -176,14 +188,28 @@ def p_item_empty(p):
     'item : empty'
     p[0] = p[1]
 
+def p_call_let(p):
+    'calllet : SIMB LPAREN SIMB atom RPAREN'
+
+    print "call", p[1], "with", [p[3],p[4]]
+    p[0] = lisp_eval(p[1],[p[3],p[4]])
+
+def p_call_let2(p):
+    'call : LPAREN calllet RPAREN'
+    p[0] = p[2]
+    val.clear()
+
+def p_call_2(p):
+    'call : LPAREN calllet call RPAREN'
+
+
+    p[0] = p[3]
+    val.clear()
+
 def p_call(p):
     'call : LPAREN SIMB items RPAREN'
-    if DEBUG: print "Calling", p[2], "with", p[3] 
-    p[0] = lisp_eval(p[2], p[3])   
-
-def p_atom_simbol(p):
-    'atom : SIMB'
-    p[0] = p[1]
+    if DEBUG: print "Calling", p[2], "with", p[3]
+    p[0] = lisp_eval(p[2],p[3])
 
 def p_atom_bool(p):
     'atom : bool'
@@ -195,9 +221,11 @@ def p_atom_num(p):
 
 # modified to accept let functions
 def p_atom_word(p):
-    'atom : TEXT'
+    '''atom : SIMB
+          | TEXT'''
 
     if p[1] in val:
+
         p[0] = val[p[1]]
 
     else:
@@ -220,18 +248,18 @@ def p_nil(p):
     p[0] = None
 
 # for assignment of let function
-def p_assign_let(p):
-    'assign : LET LPAREN SIMB NUM RPAREN'
+#def p_assign_let(p):
+    #'assign : LET LPAREN SIMB NUM RPAREN'
 
-    val[p[3]] = p[4]
-    p[0] = 0
+    #val[p[3]] = p[4]
+    #p[0] = 0
 
 # for calling let
-def p_call_let(p):
-    'call : LPAREN assign call RPAREN'
+#def p_call_let(p):
+   # 'call : LPAREN assign call RPAREN'
 
-    p[0] = p[2]
-    val.clear()
+   # p[0] = p[2]
+   # val.clear()
 
 # for calling bool
 def p_call_bool(p):

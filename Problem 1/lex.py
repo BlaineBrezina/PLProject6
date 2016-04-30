@@ -13,7 +13,7 @@ tokens = ('QUOTE', 'SIMB', 'NUM', 'LPAREN', 'RPAREN', \
 # Reserved words
 reserved = {
     'nil' : 'NIL',
-    'let' : 'LET',
+  #  'let' : 'LET',
     'if'  : 'IF',
 }
 

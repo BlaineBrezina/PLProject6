@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 from yacc import yacc, lisp_str
 import cmd
 
@@ -29,18 +30,30 @@ class MiniLisp(cmd.Cmd):     # See https://docs.python.org/2/library/cmd.html
         """Do nothing on empty input line"""
         pass
 
-    def default(self, line):       
+
+
+    def default(self, line):
+        def eval(list):
+            if list[0] == 'car':
+                return (lambda x : x[1][1][0])(list)
+            else:
+                return "unrecognized function"
+
         """Called on an input line when the command prefix is not recognized.
            In that case we execute the line as Python code.
         """
         result = yacc.parse(line)
         print (result)
-        import lis
-        print lis.eval(result)
+        #import lis
+        print eval(result)
         #s = lisp_str(result)
         #if s != 'nil':
             #print s
 
+
+
 if __name__ == '__main__':
         ml = MiniLisp()
         ml.cmdloop()     # See https://docs.python.org/2/library/cmd.html
+
+
